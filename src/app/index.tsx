@@ -6,8 +6,11 @@ import { useState, useRef } from "react"
 import { Product } from "@/components/product"
 import { Link } from "expo-router"
 import { useCartStore } from "@/stores/cart-store"
+import api from "@/services/Api"
+import { searchMenu } from "@/services/MenuApi"
 
-export default function Home(){    
+
+export default function Home(){        
     const cartStore = useCartStore();
 
     const [category, setCategory] = useState(CATEGORIES[0]);
@@ -29,7 +32,9 @@ export default function Home(){
             })
         }
     }
+    
 
+    console.log(searchMenu())
 
     return (
         <View className="flex-1 pt-8">
