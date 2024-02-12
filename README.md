@@ -5,3 +5,6 @@ Bibliotecas Utilizadas:
 TailwindCss
 NativeWind
 Zustand
+
+Link to debug:
+https://deadsimplechat.com/blog/react-native-debugger/
