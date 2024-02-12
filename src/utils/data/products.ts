@@ -28,7 +28,7 @@ const MENU = [
     data: [
       {
         id: "2",
-        title: "X-JavaScript",
+        title: "X-Javascript",
         price: 34.9,
         description:
           "Os ingredientes desse hambúrguer mudam toda semana, então você sempre terá uma surpresa...",
