@@ -44,7 +44,7 @@ export default function Home(){
                 keyExtractor={(item) => item.id}
                 stickySectionHeadersEnabled={false}
                 renderItem={({item}) => (
-                    <Link href={'/product/${item.id}'} asChild>
+                    <Link href={`/product/${item.id}`} asChild>
                         <Product data={item}></Product>
                     </Link>
                 )}

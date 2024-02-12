@@ -14,10 +14,9 @@ type ProductProps = TouchableOpacityProps & {
 export const Product = forwardRef<TouchableOpacity, ProductProps>(({data, ...rest}, ref) => {
     return(
         <TouchableOpacity className="w-full flex-row items-center pb-4"
-                          {...rest}
                           ref={ref}
-                          activeOpacity={0.7}
-        >
+                          {...rest}                          
+                          activeOpacity={0.7}>
 
             <Image source={data.thumbnail} className="w-20 h-20 rounded-md"/>
 
