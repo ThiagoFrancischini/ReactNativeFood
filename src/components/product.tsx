@@ -19,7 +19,9 @@ export const Product = forwardRef<TouchableOpacity, ProductProps>(({data, ...res
                           {...rest}                          
                           activeOpacity={0.7}>
 
-            <Image source={data.thumbnail} className="w-20 h-20 rounded-md"/>
+            {(data.thumbnail.toString() != undefined && data.thumbnail.toString() != "") &&
+                <Image source={{uri: data.thumbnail.toString()}} className="w-20 h-20 rounded-md"/>
+            }            
 
             <View className="flex-1 ml-3">
 

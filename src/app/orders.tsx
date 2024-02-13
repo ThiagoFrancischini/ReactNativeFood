@@ -2,7 +2,6 @@ import { Header } from "@/components/header";
 import { LinkButton } from "@/components/link-button";
 import Order from "@/components/order";
 import { OrderProps, OrderStatus } from "@/types/order-type";
-import { useState } from "react";
 import { View , Text, FlatList} from "react-native";
 
 export default function Orders(){
@@ -74,8 +73,7 @@ export default function Orders(){
             (
                 <Text className="text-white font-subtitle text-center mt-10">Seus pedidos aparecerão aqui!</Text>
             )}
-            
-            
+                      
             <FlatList 
                 data={orders}
                 keyExtractor={(order) => order.id.toString()}
@@ -83,9 +81,8 @@ export default function Orders(){
                 className="mt-10"
                 contentContainerStyle={{gap: 12, paddingHorizontal: 20}}
                 showsHorizontalScrollIndicator={false}
-            />
-                        
-
+            />                        
+            
             <View className="flex-1 items-center justify-end mb-20">
                 <LinkButton title="Voltar ao cardápio"  href="/"></LinkButton>
             </View>            

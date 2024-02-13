@@ -1,19 +1,22 @@
 import { View, Image, Text } from "react-native";
 import {useLocalSearchParams, useNavigation} from "expo-router"
-import { PRODUCTS } from "@/utils/data/products";
 import { FormatCurrency } from "@/utils/functions/format-currency";
 import { Button } from "@/components/button";
 import {Feather } from "@expo/vector-icons"
 import { LinkButton } from "@/components/link-button";
 import { useCartStore } from "@/stores/cart-store";
 import {Redirect} from "expo-router"
+import { getMenu } from "@/stores/helpers/menu-in-memory";
 
 
 export default function Product(){
+    const menu = getMenu();
+    const products = menu.map((item) => item.data).flat();
+
     const cartStore = useCartStore();
     const { id }  = useLocalSearchParams();        
     const navigation = useNavigation();
-    const product = PRODUCTS.find((item) => item.id === id);
+    const product = products.find((item) => item.id === id);
     
     
     function handleAddToCart(){

@@ -1,6 +1,5 @@
-import { ProductProps } from "@/utils/data/products";
+import { ProductProps } from "@/types/menu-type";
 import { ProductCartProps } from "../cart-store";
-import Product from "@/app/product/[id]";
 
 export function add(products: ProductCartProps[], newProduct: ProductProps){
     const existingProduct = products.find(({id}) => newProduct.id === id);

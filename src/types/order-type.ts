@@ -1,4 +1,4 @@
-import { ProductProps } from "@/utils/data/products"
+import { ProductProps } from "@/types/menu-type"
 
 type OrderItensProps = {
     quantity: number,

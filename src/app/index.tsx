@@ -1,19 +1,28 @@
 import {View, FlatList, SectionList, Text} from "react-native"
-import{ CATEGORIES, MENU, ProductProps } from "@/utils/data/products"
 import {Header } from "@/components/header"
 import { CategoryButton } from "@/components/category-button"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Product } from "@/components/product"
 import { Link } from "expo-router"
 import { useCartStore } from "@/stores/cart-store"
-import api from "@/services/Api"
-import { searchMenu } from "@/services/MenuApi"
+import { MenuProps, ProductProps } from "@/types/menu-type"
+import { getMenu } from "@/stores/helpers/menu-in-memory"
+import { useMenuStore } from "@/stores/menu-store"
+import { Loading } from "@/components/loading"
 
 
-export default function Home(){        
+export default function Home(){
+
+    const menu = getMenu();
+
+    if(!menu){
+        console.log("me derrubaro aqui ó")
+    }
+    const categories = menu.map((item)=> item.title);
+
     const cartStore = useCartStore();
 
-    const [category, setCategory] = useState(CATEGORIES[0]);
+    const [category, setCategory] = useState(categories[0]);
 
     const sectionListRef = useRef<SectionList<ProductProps>>(null);
 
@@ -22,7 +31,7 @@ export default function Home(){
     function handleCategorySelect(selectedCategory : string){
         setCategory(selectedCategory);
 
-        const sectionIndex = CATEGORIES.findIndex((category) => category === selectedCategory)
+        const sectionIndex = categories.findIndex((category) => category === selectedCategory)
 
         if(sectionListRef.current){
             sectionListRef.current.scrollToLocation({
@@ -32,17 +41,13 @@ export default function Home(){
             })
         }
     }
-    
-    /* searchMenu().then(console.log) */
-
-    /* searchMenu().then(console.log).catch((err) => console.log(err.response?.data, err.toJSON())) */
 
     return (
         <View className="flex-1 pt-8">
-            <Header title="Faça o seu pedido" cartQuantityItems={cartQuantityItems}/>            
+            <Header title="Faça o seu pedido" cartQuantityItems={cartQuantityItems}/>
 
-            <FlatList 
-                data={CATEGORIES}
+            <FlatList
+                data={categories}
                 keyExtractor={(item) => item}
                 renderItem={({item}) => <CategoryButton title={item} isSelected={item === category} onPress={() => handleCategorySelect(item)}></CategoryButton>}
                 horizontal
@@ -52,7 +57,7 @@ export default function Home(){
 
             <SectionList
                 ref={sectionListRef}
-                sections={MENU}
+                sections={menu}
                 keyExtractor={(item) => item.id}
                 stickySectionHeadersEnabled={false}
                 renderItem={({item}) => (

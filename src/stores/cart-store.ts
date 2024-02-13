@@ -1,4 +1,4 @@
-import { ProductProps } from "@/utils/data/products";
+import { ProductProps } from "@/types/menu-type";
 import zustand, { create } from "zustand";
 import * as cartInMemory from "./helpers/cart-in-memory"
 import {createJSONStorage, persist } from "zustand/middleware"
