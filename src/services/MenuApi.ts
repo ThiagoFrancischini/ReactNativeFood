@@ -1,9 +1,21 @@
+import axios from "axios";
 import api from "./Api";
     
 export async function searchMenu() {
     
-    const response = await api.get('/menu');                
+    try{    
+        axios.interceptors.response.use(
+            response => response,
+            error => {
+              throw error
+            }
+        )
 
-    return response.data;
-    
+        const response = api.get('/menu').then(() => console.log("deu bao")).catch((err) => console.log(err));
+
+        return response;    
+    }
+    catch(e){
+        console.log("(e as Error).message")
+    }
 }

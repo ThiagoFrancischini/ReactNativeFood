@@ -33,8 +33,9 @@ export default function Home(){
         }
     }
     
+    /* searchMenu().then(console.log) */
 
-    console.log(searchMenu())
+    /* searchMenu().then(console.log).catch((err) => console.log(err.response?.data, err.toJSON())) */
 
     return (
         <View className="flex-1 pt-8">
