@@ -10,15 +10,15 @@ import { getMenu } from "@/stores/helpers/menu-in-memory";
 
 
 export default function Product(){
-    const menu = getMenu();
+    const menu = getMenu();    
     const products = menu.map((item) => item.data).flat();
 
     const cartStore = useCartStore();
     const { id }  = useLocalSearchParams();        
+
     const navigation = useNavigation();
-    const product = products.find((item) => item.id === id);
-    
-    
+    const product = products.find((item) => item.id == id);
+
     function handleAddToCart(){
         if(product){
             cartStore.add(product);
@@ -32,7 +32,7 @@ export default function Product(){
 
     return (
         <View className="flex-1">
-            <Image source={product.cover}
+            <Image source={{uri: product.cover.toString()}}
                    className="w-full h-52"
                    resizeMode="cover"/>            
 
