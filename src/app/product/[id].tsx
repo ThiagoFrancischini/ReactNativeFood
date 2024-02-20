@@ -11,6 +11,7 @@ import { getMenu } from "@/stores/helpers/menu-in-memory";
 
 export default function Product(){
     const menu = getMenu();    
+
     const products = menu.map((item) => item.data).flat();
 
     const cartStore = useCartStore();
