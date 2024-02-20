@@ -9,10 +9,13 @@ interface MenuState {
     fetchMenu: () => Promise<void>;
 }
 
-export const useMenuStore = create<MenuState>((set) => ({
+export const useMenuStore = create<MenuState>((set, get) => ({
     menu: [],        
     fetchMenu: async () => {                
-        const result = await searchMenu();
-        set({ menu: [ result ]});        
+        // Verifica se o menu ainda não foi carregado
+        if (get().menu.length === 0) {
+            const result = await searchMenu();
+            set({ menu: [result] }); // Atualiza o estado com os dados da API
+        }
     }
 }));

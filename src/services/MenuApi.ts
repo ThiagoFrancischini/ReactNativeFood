@@ -7,6 +7,8 @@ export async function searchMenu() : Promise<MenuProps> {
 
     const response = await api.get('/menu');        
 
+    console.log(response.data)
+
     return response.data;    
 
 }

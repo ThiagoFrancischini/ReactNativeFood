@@ -1,27 +1,35 @@
 import {View, FlatList, SectionList, Text} from "react-native"
 import {Header } from "@/components/header"
 import { CategoryButton } from "@/components/category-button"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Product } from "@/components/product"
 import { Link } from "expo-router"
 import { useCartStore } from "@/stores/cart-store"
-import { ProductProps } from "@/types/menu-type"
+import { MenuProps, ProductProps } from "@/types/menu-type"
 import { getMenu } from "@/stores/helpers/menu-in-memory"
 
 export default function Home(){
 
-    try{        
-        const menu = getMenu();
-        
-        const categories = menu.map((item)=> item.title);
+    const [menu, setMenu] = useState<MenuProps>();
 
-        const cartStore = useCartStore();
+    useEffect(() => {
+        if (!menu || menu.length < 1) {
+            setMenu(getMenu());
+        }
+    }, [menu]);
     
-        const [category, setCategory] = useState(categories[0]);
     
-        const sectionListRef = useRef<SectionList<ProductProps>>(null);
+    const categories = menu ? menu.map((item)=> item.title) : [];                
+        
+    const [category, setCategory] = useState(categories[0]);
+
+    const cartStore = useCartStore();
+
+    const sectionListRef = useRef<SectionList<ProductProps>>(null);
     
-        const cartQuantityItems = cartStore.products.reduce((total, product) => total + product.quantity, 0);
+    const cartQuantityItems = cartStore.products.reduce((total, product) => total + product.quantity, 0);
+    
+    try{                
     
         function handleCategorySelect(selectedCategory : string){
             setCategory(selectedCategory);
@@ -50,7 +58,8 @@ export default function Home(){
                     contentContainerStyle={{gap: 12, paddingHorizontal: 20}}
                     showsHorizontalScrollIndicator={false}/>
     
-                <SectionList
+                {menu ? (
+                    <SectionList
                     ref={sectionListRef}
                     sections={menu}
                     keyExtractor={(item) => item.id}
@@ -67,11 +76,17 @@ export default function Home(){
                     showsVerticalScrollIndicator = {false}
                     contentContainerStyle={{paddingBottom: 100}}
                 />
+                ):
+                <View className="flex-1 pt-8 justify-center items-center">
+                    <Text className="text-white font-body text-xl">Erro ao conectar ao servidor!</Text>
+                </View>
+                }                
             </View>
         )
+        
     }
-    catch
-    {
+    catch (error)
+    {        
         return (
             <View className="flex-1 pt-8 justify-center items-center">
                 <Text className="text-white font-body text-xl">Erro ao conectar ao servidor!</Text>
