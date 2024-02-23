@@ -7,8 +7,9 @@ import { Link } from "expo-router"
 import { useCartStore } from "@/stores/cart-store"
 import { MenuProps, ProductProps } from "@/types/menu-type"
 import { getMenu } from "@/stores/helpers/menu-in-memory"
+import Login from "./login"
 
-export default function Home(){
+/*export default function Home(){
 
     const [menu, setMenu] = useState<MenuProps>();
 
@@ -93,4 +94,12 @@ export default function Home(){
             </View>
         )
     }    
+}*/
+
+export default function Home(){
+    return  (
+        <Login>
+
+        </Login>
+    )
 }
