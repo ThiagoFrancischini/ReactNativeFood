@@ -1,12 +1,54 @@
 import { Button } from "@/components/button";
 import { Entry } from "@/components/entry";
+import { insert } from "@/services/UserApi";
+import { ErrorProps } from "@/types/error-type";
+import { UserProps, UserProp } from "@/types/user-type";
 import { useState } from "react";
 import { View,Text, ScrollView, Image } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-export default function Registro(){
+export default function Registro(){        
 
-    const [user, setUser] = useState(null);
+    const [error, setError] = useState<ErrorProps>({
+        exists: false,
+        message: '',
+    })
+
+    const [user, setUser] = useState({
+        id: '',
+        email: '',
+        nome: '',
+        cpf: '',
+        password: '',
+        endereco: '',
+        autenticado: false,
+        telefone: '',
+    });
+
+    const [confirmedPassword, setConfirmedPassword] = useState('');
+
+    const handleUser = (field: string, value: string) => {
+        setUser({ ...user, [field]: value });
+    }
+
+    async function submit(user: UserProp, confirmedPassword: string){
+        try{
+            if(!user){
+                return;
+            }        
+    
+            if(user.password !== confirmedPassword){
+                throw new Error("Senhas não conferem")
+            }             
+
+            await insert([user]);
+        }
+        catch(error: any){         
+            console.log(error.message)   
+            setError({exists: true, message: error.message})
+        }        
+    }
+
 
     return(
         <View className="flex-1 pt-8">            
@@ -18,27 +60,31 @@ export default function Registro(){
                         <Text className="text-white font-body text-2xl font-bold w-full text-center mb-4">Faça o seu registro!</Text>
 
                         <Text className=" ml-4 text-white font-body text-lg font-bold">CPF</Text>
-                        <Entry></Entry>
+                        <Entry onChangeText={(text) => handleUser('cpf', text)}></Entry>
 
                         <Text className=" ml-4 text-white font-body text-lg font-bold">Nome</Text>
-                        <Entry></Entry>
+                        <Entry onChangeText={(text) => handleUser('nome', text)}></Entry>
 
                         <Text className=" ml-4 text-white font-body text-lg font-bold">Email</Text>
-                        <Entry></Entry>
+                        <Entry onChangeText={(text) => handleUser('email', text)}></Entry>
 
                         <Text className=" ml-4 text-white font-body text-lg font-bold">Telefone</Text>
-                        <Entry></Entry>
+                        <Entry onChangeText={(text) => handleUser('telefone', text)}></Entry>
 
                         <Text className=" ml-4 text-white font-body text-lg font-bold">Endereço</Text>
-                        <Entry></Entry>
+                        <Entry onChangeText={(text) => handleUser('endereco', text)}></Entry>
 
                         <Text className=" ml-4 text-white font-body text-lg font-bold">Senha</Text>
-                        <Entry></Entry>
+                        <Entry onChangeText={(text) => handleUser('password', text)}></Entry>
 
                         <Text className=" ml-4 text-white font-body text-lg font-bold">Confirmar Senha</Text>
-                        <Entry></Entry>
+                        <Entry onChangeText={(text) => setConfirmedPassword(text)}></Entry>
 
-                        <Button className="mx-4 my-5">
+                        {error.exists && 
+                            <Text className="text-red-500 font-body text-sl font-bold w-full text-center mb-4 my-2">{error.message}</Text>   
+                        }
+
+                        <Button className="mx-4 my-5" onPress={() => submit(user, confirmedPassword)}>
                             <Button.Text>Registrar</Button.Text>
                         </Button>
                     </View>

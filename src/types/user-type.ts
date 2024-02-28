@@ -7,7 +7,19 @@ type UserProps = [
         password: string,
         endereco: string,
         autenticado: boolean,
+        telefone: string,
     }
 ]
 
-export { UserProps };
+type UserProp = {
+    id: string,
+    email: string,
+    nome: string,
+    cpf: string, 
+    password: string,
+    endereco: string,
+    autenticado: boolean,
+    telefone: string,
+}
+
+export { UserProps, UserProp };

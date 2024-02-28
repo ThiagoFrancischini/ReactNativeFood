@@ -9,11 +9,19 @@ export async function authenticate(cpf: string, password: string) : Promise<User
         {
             "cpf": cpf, 
             "password": password}
-        ); 
-        
+        );  
+
+        if (response.status === 400) {
+            throw("Falha na autenticação");
+        }                
+
         return response.data;
     }
-    catch(error : any){
+    catch(error : any){        
+
+        if(error.response.status === 400){
+            throw("CPF ou Senha inválidos");
+        }
         return error.response.data;
     }    
 }
