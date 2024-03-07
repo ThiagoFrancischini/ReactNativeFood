@@ -92,7 +92,7 @@ export default function Cart(){
                     </Button.Icon>
                 </Button>
 
-                <LinkButton title="Voltar ao cardápio" href="/"></LinkButton>
+                <LinkButton title="Voltar ao cardápio" href=".."></LinkButton>
             </View>
         </View>
     )

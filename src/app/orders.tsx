@@ -1,5 +1,6 @@
 import { Header } from "@/components/header";
 import { LinkButton } from "@/components/link-button";
+import { Loading } from "@/components/loading";
 import Order from "@/components/order";
 import { OrderProps, OrderStatus } from "@/types/order-type";
 import { View , Text, FlatList} from "react-native";
@@ -83,8 +84,8 @@ export default function Orders(){
                 showsHorizontalScrollIndicator={false}
             />                        
             
-            <View className="flex-1 items-center justify-end mb-20">
-                <LinkButton title="Voltar ao cardápio"  href="/"></LinkButton>
+            <View className="flex-1 items-center justify-end mb-20">                
+                <LinkButton title="Voltar ao cardápio"  href=".."></LinkButton>
             </View>            
         </View>
     )

@@ -1,105 +1,95 @@
-import {View, FlatList, SectionList, Text} from "react-native"
-import {Header } from "@/components/header"
-import { CategoryButton } from "@/components/category-button"
-import { useState, useRef, useEffect } from "react"
-import { Product } from "@/components/product"
-import { Link } from "expo-router"
-import { useCartStore } from "@/stores/cart-store"
-import { MenuProps, ProductProps } from "@/types/menu-type"
-import { getMenu } from "@/stores/helpers/menu-in-memory"
-import Login from "./login"
+import { Entry } from "@/components/entry";
+import { useState } from "react";
+import { View, Text, Image, ScrollView } from "react-native";
+import { FormatCpf } from "@/utils/functions/format-cpf";
+import { Button } from "@/components/button";
+import { LinkButton } from "@/components/link-button";
+import { authenticate } from "@/services/UserApi";
+import { useUserStore } from "@/stores/user-store";
+import { router } from "expo-router";
 
-/*export default function Home(){
+function goToHome(){
+    router.replace("/home");        
+}
 
-    const [menu, setMenu] = useState<MenuProps>();
-
-    useEffect(() => {
-        if (!menu || menu.length < 1) {
-            setMenu(getMenu());
-        }
-    }, [menu]);
+export default function Login(){
+    const usuarioLogado =  useUserStore.getState().loggedUser?.autenticado ? true : false;
     
-    
-    const categories = menu ? menu.map((item)=> item.title) : [];                
-        
-    const [category, setCategory] = useState(categories[0]);
-
-    const cartStore = useCartStore();
-
-    const sectionListRef = useRef<SectionList<ProductProps>>(null);
-    
-    const cartQuantityItems = cartStore.products.reduce((total, product) => total + product.quantity, 0);
-    
-    try{                
-    
-        function handleCategorySelect(selectedCategory : string){
-            setCategory(selectedCategory);
-    
-            const sectionIndex = categories.findIndex((category) => category === selectedCategory)
-    
-            if(sectionListRef.current){
-                sectionListRef.current.scrollToLocation({
-                    animated: true,
-                    sectionIndex,
-                    itemIndex: 0
-                })
-            }
-        }
-    
-        return (
-            <View className="flex-1 pt-8">
-                <Header title="Faça o seu pedido" cartQuantityItems={cartQuantityItems}/>
-    
-                <FlatList
-                    data={categories}
-                    keyExtractor={(item) => item}
-                    renderItem={({item}) => <CategoryButton title={item} isSelected={item === category} onPress={() => handleCategorySelect(item)}></CategoryButton>}
-                    horizontal
-                    className="max-h-10 mt-5"
-                    contentContainerStyle={{gap: 12, paddingHorizontal: 20}}
-                    showsHorizontalScrollIndicator={false}/>
-    
-                {menu ? (
-                    <SectionList
-                    ref={sectionListRef}
-                    sections={menu}
-                    keyExtractor={(item) => item.id}
-                    stickySectionHeadersEnabled={false}
-                    renderItem={({item}) => (
-                        <Link href={`/product/${item.id}`} asChild>
-                            <Product data={item}></Product>
-                        </Link>
-                    )}
-                    renderSectionHeader={({section: {title}}) => (
-                        <Text className="text-white text-xl font-heading mt-8 mb-3">{title}</Text>
-                    )}
-                    className="flex-1 p-5"
-                    showsVerticalScrollIndicator = {false}
-                    contentContainerStyle={{paddingBottom: 100}}
-                />
-                ):
-                <View className="flex-1 pt-8 justify-center items-center">
-                    <Text className="text-white font-body text-xl">Erro ao conectar ao servidor!</Text>
-                </View>
-                }                
-            </View>
-        )
-        
+    if(usuarioLogado){
+        goToHome();
+        return;
     }
-    catch (error)
-    {        
-        return (
-            <View className="flex-1 pt-8 justify-center items-center">
-                <Text className="text-white font-body text-xl">Erro ao conectar ao servidor!</Text>
-            </View>
-        )
-    }    
-}*/
 
-export default function Home(){
-    return  (
-        <Login>
+    const [cpf, setCpf] = useState("");
+    const [password, setPassword] = useState("");
+    const [sucessLogin, setSucessLogin] = useState(true);
 
-        </Login>
+    const handleCpfChange = (cpf : string) => {
+        setCpf(FormatCpf(cpf));
+    }
+
+    const handlePasswordChange = (password : string) => {
+        setPassword(password);
+    }
+
+    async function onAuthenticate(cpf : string, password : string){
+        try{
+            let user = await authenticate(cpf, password);
+    
+            if(user == undefined || user == null){
+                throw("Cpf ou senha inválidos");
+            }                 
+
+            setSucessLogin(true);
+
+            useUserStore.getState().setUser(user);   
+            
+            console.log(user);
+
+            goToHome();
+
+            return;
+        }
+        catch(error){
+            setSucessLogin(false);
+        }
+    }
+    
+    return(              
+        <View className="flex-1 pt-5">
+            <Image source={require("@/assets/logo.png")} className="h-6 w-32 m-5"></Image>
+
+            <View className="flex-1 justify-center">                    
+
+                <Text className="text-white font-body text-4xl font-bold w-full text-center mb-4">Bem vindo!</Text>
+
+                <Text className="text-slate-400 font-body text-sl font-bold w-full text-center mb-4 my-2">Por favor realize seu login</Text>
+
+                <Text className=" ml-4 text-white font-body text-lg font-bold">CPF</Text>
+
+                <Entry value={cpf}
+                    maxLength={14}
+                    keyboardType="numeric"
+                    onChangeText={handleCpfChange}>
+                </Entry>
+
+                <Text className=" ml-4 text-white font-body text-lg font-bold">Senha</Text>
+
+                <Entry secureTextEntry                    
+                    value={password}
+                    onChangeText={handlePasswordChange}>
+                </Entry>
+
+                <Button className="mx-4 mt-10" onPress={() => onAuthenticate(cpf, password)}>
+                    <Button.Text>Login</Button.Text>
+                </Button>
+
+                {sucessLogin == false &&
+                    <Text className="text-red-500 font-body text-sl font-bold w-full text-center mb-4 my-2">Dados inválidos</Text>   
+                }                    
+
+                <LinkButton title="Primeiro registro" href="/register" className="mt-5"></LinkButton>            
+            </View>        
+        </View>                
     )
 }

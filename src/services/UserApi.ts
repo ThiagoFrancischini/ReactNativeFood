@@ -9,7 +9,7 @@ export async function authenticate(cpf: string, password: string) : Promise<User
         {
             "cpf": cpf, 
             "password": password}
-        );  
+        );                  
 
         if (response.status === 400) {
             throw("Falha na autenticação");
