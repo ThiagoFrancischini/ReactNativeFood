@@ -10,7 +10,7 @@ type StateProps  = {
 
 export const useUserStore = create(persist <StateProps>((set) => ({    
     setUser: (user: UserProps) => ({        
-        loggedUser: user        
+        loggedUser: user,
     }),    
 }), {
     name: "nlw-expert:user",

@@ -7,18 +7,43 @@ import { LinkButton } from "@/components/link-button";
 import { authenticate } from "@/services/UserApi";
 import { useUserStore } from "@/stores/user-store";
 import { router } from "expo-router";
+import * as SecureStore from 'expo-secure-store';
+import { UserProp } from "@/types/user-type";
 
 function goToHome(){
     router.replace("/home");        
 }
 
-export default function Login(){
-    const usuarioLogado =  useUserStore.getState().loggedUser?.autenticado ? true : false;
+async function getUserLogado() : Promise<boolean>{    
+    try{
+        if(useUserStore.getState().loggedUser?.autenticado ? true : false){
+            return true;
+        }
+        
+        const jsonObj = await SecureStore.getItemAsync("userSecureStore");
     
-    if(usuarioLogado){
-        goToHome();
-        return;
+        if(jsonObj){
+            const user: UserProp = JSON.parse(jsonObj) as UserProp;
+            if(user.autenticado){
+                useUserStore.getState().setUser([user]);   
+                return true;
+            }
+        }                
+    
+        return false;
     }
+    catch{
+        return false;
+    }    
+}
+
+export default function Login(){
+    
+    getUserLogado().then((result) => {
+        if(result){
+            goToHome();            
+        }
+    })    
 
     const [cpf, setCpf] = useState("");
     const [password, setPassword] = useState("");
@@ -34,7 +59,7 @@ export default function Login(){
 
     async function onAuthenticate(cpf : string, password : string){
         try{
-            let user = await authenticate(cpf, password);
+            const user = await authenticate(cpf, password);
     
             if(user == undefined || user == null){
                 throw("Cpf ou senha inválidos");
@@ -42,9 +67,9 @@ export default function Login(){
 
             setSucessLogin(true);
 
-            useUserStore.getState().setUser(user);   
+            useUserStore.getState().setUser(user);                      
             
-            console.log(user);
+            await SecureStore.setItemAsync("userSecureStore", JSON.stringify(user));
 
             goToHome();
 
@@ -53,11 +78,11 @@ export default function Login(){
         catch(error){
             setSucessLogin(false);
         }
-    }
+    }    
     
     return(              
         <View className="flex-1 pt-5">
-            <Image source={require("@/assets/logo.png")} className="h-6 w-32 m-5"></Image>
+            <Image source={require("@/assets/logo.png")} className="h-6 w-32 m-5"></Image> 
 
             <View className="flex-1 justify-center">                    
 
@@ -84,12 +109,12 @@ export default function Login(){
                     <Button.Text>Login</Button.Text>
                 </Button>
 
-                {sucessLogin == false &&
+                {sucessLogin == false && (
                     <Text className="text-red-500 font-body text-sl font-bold w-full text-center mb-4 my-2">Dados inválidos</Text>   
-                }                    
+                )}                    
 
                 <LinkButton title="Primeiro registro" href="/register" className="mt-5"></LinkButton>            
-            </View>        
+            </View>         
         </View>                
     )
 }
