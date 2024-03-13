@@ -1,6 +1,6 @@
 import axios from "axios";
 import api from "./Api";
-import { UserProp, UserProps } from "@/types/user-type";
+import { UserProp } from "@/types/user-type";
 
 export async function authenticate(cpf: string, password: string) : Promise<UserProp>{     
 
@@ -9,11 +9,11 @@ export async function authenticate(cpf: string, password: string) : Promise<User
         {
             "cpf": cpf, 
             "password": password}
-        );                  
+        );                          
 
         if (response.status === 400) {
             throw("Falha na autenticação");
-        }                
+        }                        
 
         return response.data;
     }
@@ -26,12 +26,15 @@ export async function authenticate(cpf: string, password: string) : Promise<User
     }    
 }
 
-export async function insert(user: UserProps) {    
-    try{
-        const response = await api.post('/usuario',user);         
+export async function insert(usuario: UserProp) {    
+    try{        
+        
+        usuario.id = '00000000-0000-0000-0000-000000000000';              
+        const response = await api.post('/usuario',usuario);                 
         return response.data;
     }
-    catch(error : any){
+    catch(error : any){       
+        console.log(error.response.data) 
         return error.response.data;
     }
 }
