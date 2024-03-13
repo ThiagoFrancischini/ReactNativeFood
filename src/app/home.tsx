@@ -8,13 +8,9 @@ import { useCartStore } from "@/stores/cart-store"
 import { MenuProps, ProductProps } from "@/types/menu-type"
 import { getMenu } from "@/stores/helpers/menu-in-memory"
 import { Loading } from "@/components/loading"
-import { useUserStore } from "@/stores/user-store"
 
 
 export default function Home(){    
-
-    //const usuarioLogado =  useUserStore.getState().loggedUser?.autenticado ? true : false;
-    console.log(useUserStore.getState().loggedUser?.email);
 
     const [menu, setMenu] = useState<MenuProps>();
 
@@ -35,8 +31,7 @@ export default function Home(){
     
     const cartQuantityItems = cartStore.products.reduce((total, product) => total + product.quantity, 0);
     
-    try{                
-    
+    try{                        
         if(!menu || menu.length <1){
             return (<Loading/>)
         }
@@ -56,8 +51,8 @@ export default function Home(){
         }
     
         return (
-            <View className="flex-1 pt-8">
-                <Header title="Faça o seu pedido" cartQuantityItems={cartQuantityItems}/>
+            <View className="flex-1 pt-8 bg-slate-900">
+                <Header title="Faça o seu pedido" cartQuantityItems={cartQuantityItems} showDrawerMenu={true}/>
     
                 <FlatList
                     data={categories}

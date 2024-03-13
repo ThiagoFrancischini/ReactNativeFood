@@ -5,13 +5,23 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type StateProps  = {    
     loggedUser?: UserProp
-    setUser: (user: UserProps) => void    
+    setUser: (user: UserProps) => void     
+    deleteUser: () => void
 }
 
 export const useUserStore = create(persist <StateProps>((set) => ({    
-    setUser: (user: UserProps) => ({        
-        loggedUser: user,
-    }),    
+    setUser: (user) => {
+        if(user){
+            set((
+                {            
+                    loggedUser: user[0],            
+                }
+            ))
+        }
+      },
+    deleteUser: () => {        
+        set(({ loggedUser: undefined }))       
+    },
 }), {
     name: "nlw-expert:user",
     storage: createJSONStorage(()=> AsyncStorage)

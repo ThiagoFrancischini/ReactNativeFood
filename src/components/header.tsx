@@ -2,14 +2,23 @@ import { View, Image , Text, TouchableOpacity} from "react-native"
 import {Feather, MaterialIcons } from "@expo/vector-icons"
 import colors from "tailwindcss/colors"
 import {Link} from "expo-router"
-
+import { DrawerActions } from "@react-navigation/native"
+import { useNavigation } from "expo-router"
 
 type HeaderProps = {
     title : string
     cartQuantityItems?: number
     showOrders?: boolean
+    showDrawerMenu?: boolean,
 }
-export function Header({title, cartQuantityItems = 0, showOrders = true}: HeaderProps){
+export function Header({title, cartQuantityItems = 0, showOrders = false, showDrawerMenu = false}: HeaderProps){
+
+    const navigation = useNavigation();
+
+    const onDrawerToogle = () => {
+        navigation.dispatch(DrawerActions.openDrawer());
+    };
+
     return (
         <View className="flex-row items-center border-b border-slate-700 pb-5 mx-5">
             <View className="flex-1">
@@ -38,8 +47,7 @@ export function Header({title, cartQuantityItems = 0, showOrders = true}: Header
                                         items-center 
                                         justify-center
                                         top-2
-                                        z-10
-                                        -right-3.5">
+                                        z-10">
 
                             <Text className="text-slate-900 font-bold text-xs">{cartQuantityItems}</Text>
                         </View>
@@ -48,6 +56,18 @@ export function Header({title, cartQuantityItems = 0, showOrders = true}: Header
                     </TouchableOpacity> 
                 </Link>
                 )}           
+
+                {showDrawerMenu && (
+                    <TouchableOpacity onPress={onDrawerToogle} 
+                                      activeOpacity={0.7} 
+                                      className="mt-4 
+                                                 mr-5
+                                                 -right-3.5">
+                        <Feather name="menu" color={colors.white} size={24}/>                    
+                    </TouchableOpacity>
+                )}
+
+
             </View>                        
         </View>
     )

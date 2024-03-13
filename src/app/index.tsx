@@ -5,27 +5,20 @@ import { FormatCpf } from "@/utils/functions/format-cpf";
 import { Button } from "@/components/button";
 import { LinkButton } from "@/components/link-button";
 import { authenticate } from "@/services/UserApi";
-import { useUserStore } from "@/stores/user-store";
 import { router } from "expo-router";
-import * as SecureStore from 'expo-secure-store';
-import { UserProp } from "@/types/user-type";
-
+import 'react-native-gesture-handler'
+import { getUserLogado, setUser } from "@/stores/helpers/user-in-memory";
 function goToHome(){
-    router.replace("/home");        
+    router.replace("/drawer.routes");        
 }
 
-async function getUserLogado() : Promise<boolean>{    
+async function getCurrentUser() : Promise<boolean>{    
     try{
-        if(useUserStore.getState().loggedUser?.autenticado ? true : false){
-            return true;
-        }
-        
-        const jsonObj = await SecureStore.getItemAsync("userSecureStore");
+
+        const jsonObj = await getUserLogado();
     
         if(jsonObj){
-            const user: UserProp = JSON.parse(jsonObj) as UserProp;
-            if(user.autenticado){
-                useUserStore.getState().setUser([user]);   
+            if(jsonObj.autenticado){
                 return true;
             }
         }                
@@ -38,8 +31,9 @@ async function getUserLogado() : Promise<boolean>{
 }
 
 export default function Login(){
-    
-    getUserLogado().then((result) => {
+
+
+    getCurrentUser().then((result) => {
         if(result){
             goToHome();            
         }
@@ -58,18 +52,16 @@ export default function Login(){
     }
 
     async function onAuthenticate(cpf : string, password : string){
-        try{
-            const user = await authenticate(cpf, password);
+        try{            
+            let user = await authenticate(cpf, password);
     
             if(user == undefined || user == null){
                 throw("Cpf ou senha inválidos");
-            }                 
+            }                             
 
-            setSucessLogin(true);
+            setSucessLogin(true);            
 
-            useUserStore.getState().setUser(user);                      
-            
-            await SecureStore.setItemAsync("userSecureStore", JSON.stringify(user));
+            setUser(user);                                          
 
             goToHome();
 

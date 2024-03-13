@@ -66,9 +66,9 @@ export default function Orders(){
     let hasOrders: boolean = orders.length > 0 ? true : false;
 
     return(
-        <View className="flex-1 pt-8">
+        <View className="flex-1 pt-8 bg-slate-900">
             
-            <Header title="Seus Pedidos" showOrders={false}></Header>
+            <Header title="Seus Pedidos" showOrders={false} showDrawerMenu></Header>
             
             {!hasOrders && 
             (
@@ -84,9 +84,7 @@ export default function Orders(){
                 showsHorizontalScrollIndicator={false}
             />                        
             
-            <View className="flex-1 items-center justify-end mb-20">                
-                <LinkButton title="Voltar ao cardápio"  href=".."></LinkButton>
-            </View>            
+   
         </View>
     )
 }

@@ -1,8 +1,8 @@
 import axios from "axios";
 import api from "./Api";
-import { UserProps } from "@/types/user-type";
+import { UserProp, UserProps } from "@/types/user-type";
 
-export async function authenticate(cpf: string, password: string) : Promise<UserProps>{     
+export async function authenticate(cpf: string, password: string) : Promise<UserProp>{     
 
     try{
         const response = await api.post('/usuario/autenticar', 
