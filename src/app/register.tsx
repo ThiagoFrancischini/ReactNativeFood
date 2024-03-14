@@ -4,12 +4,44 @@ import { insert } from "@/services/UserApi";
 import { ErrorProps } from "@/types/error-type";
 import { FormatCpf } from "@/utils/functions/format-cpf";
 import { UserProp } from "@/types/user-type";
-import { useState } from "react";
-import { View,Text, ScrollView, Image } from "react-native";
+import { useEffect, useState } from "react";
+import { View,Text, ScrollView, Image, Platform } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { FormatPhone } from "@/utils/functions/format-phone";
+import * as Location from 'expo-location';
+import { LinkButton } from "@/components/link-button";
 
-export default function Registro(){            
+export default function Registro(){               
+    const [location, setLocation] = useState<Location.LocationObject | null>(null);
+
+    useEffect(() => {
+        (async () => {
+          
+            try{
+                let { status } = await Location.requestForegroundPermissionsAsync();
+                if (status !== 'granted') {
+                    console.log(status);
+                    return;
+                }
+            
+                const location = await Location.getCurrentPositionAsync({});
+                setLocation(location);
+                const adress = await Location.reverseGeocodeAsync(location.coords);                    
+                if(adress && adress.length > 0){                                       
+                    setUser({
+                        ...user,
+                        rua: adress[0].street == null ? '' : adress[0].street,
+                        bairro: adress[0].subregion == null ? '' : adress[0].subregion,
+                        numero: adress[0].streetNumber == null ? '' : adress[0].streetNumber,
+                        cidade: adress[0].city == null ? '' : adress[0].city
+                      });
+                }
+            }
+            catch(error : any){
+                console.log(error);
+            }          
+        })();
+      }, []);
 
     const [error, setError] = useState<ErrorProps>({
         exists: false,
@@ -43,7 +75,7 @@ export default function Registro(){
         }
 
         setUser({ ...user, [field]: value });
-    }
+    }    
 
     async function submit(user: UserProp, confirmedPassword: string){
         try{            
@@ -117,6 +149,9 @@ export default function Registro(){
                         <Button className="mx-4 my-5" onPress={() => submit(user, confirmedPassword)}>
                             <Button.Text>Registrar</Button.Text>
                         </Button>
+
+                        <LinkButton href=".." title="Voltar">
+                        </LinkButton>
                     </View>
                 </ScrollView>
             </KeyboardAwareScrollView>
