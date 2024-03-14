@@ -1,24 +1,21 @@
 import { ProductProps } from "@/types/menu-type"
-
-type OrderItensProps = {
-    quantity: number,
-    product: ProductProps
-}
+import { UserProp } from "./user-type"
 
 type OrderProps = {  
-    id: number,  
-    orderDate: Date,
-    location: string,
-    price: number,
-    itens: OrderItensProps[],
-    status: OrderStatus,
+    id: string,  
+    dataInclusao: Date,
+    usuario: UserProp | null,
+    PrecoTotal: number,
+    produtos: ProductProps[],
+    statusPedido: OrderStatus,
 }
 
 enum OrderStatus {
-    Aprovado = "Aprovado",
-    Andamento = "Em andamento",
-    Percuros = "Saiu para entrega",
-    Finalizado = "Finalizado",
+    EmAnalise = 0,
+    Aprovado = 1,
+    Andamento = 2,
+    EmPercurso = 3,
+    Finalizado = 4,
 }
 
-export { OrderProps, OrderItensProps, OrderStatus}
+export { OrderProps, OrderStatus}

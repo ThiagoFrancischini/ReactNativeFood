@@ -6,12 +6,11 @@ import { DrawerActions } from "@react-navigation/native"
 import { useNavigation } from "expo-router"
 
 type HeaderProps = {
-    title : string
-    cartQuantityItems?: number
-    showOrders?: boolean
+    title : string,
+    cartQuantityItems?: number,
     showDrawerMenu?: boolean,
 }
-export function Header({title, cartQuantityItems = 0, showOrders = false, showDrawerMenu = false}: HeaderProps){
+export function Header({title, cartQuantityItems = 0, showDrawerMenu = false}: HeaderProps){
 
     const navigation = useNavigation();
 
@@ -26,16 +25,7 @@ export function Header({title, cartQuantityItems = 0, showOrders = false, showDr
                 <Text className="text-white text-xl font-heading mt-2 ">{title}</Text>
             </View>
 
-            <View className="flex-row">
-
-                {showOrders && (
-                    <Link href="/orders" asChild>
-
-                    <TouchableOpacity activeOpacity={0.7} className="mt-4 mr-5">                        
-                        <MaterialIcons name="delivery-dining" size={24} color={colors.white}/>
-                    </TouchableOpacity> 
-                    </Link>    
-                )}                
+            <View className="flex-row">       
 
                 { cartQuantityItems > 0 &&(
                 <Link href="/cart" asChild>
