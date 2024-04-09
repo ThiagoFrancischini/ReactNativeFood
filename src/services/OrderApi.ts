@@ -4,13 +4,13 @@ import { returnGuidEmpty } from "@/utils/functions/guid-functions";
 import { getUserLogado } from "@/stores/helpers/user-in-memory";
 
 
-export async function insert(order: OrderProps) {    
+export async function insertOrder(order: OrderProps) {    
     try{        
         
         order.id = returnGuidEmpty();                         
 
-        const response = await api.post('/pedido', order);    
-        
+        const response = await api.post('/pedido', order);                    
+
         if (response.status !== 200) {
             throw(response.data);
         }
@@ -32,7 +32,7 @@ export async function getPedidos() : Promise<OrderProps[]>{
             userId = user.id;
         }
 
-        const response = await api.get('/pedido/' + userId);    
+        const response = await api.get('/pedido/' + userId);            
         
         if (response.status !== 200) {
             throw(response.data);

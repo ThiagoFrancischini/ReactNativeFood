@@ -1,36 +1,46 @@
 import { Header } from "@/components/header";
 import Order from "@/components/order";
-import { getUserLogado } from "@/stores/helpers/user-in-memory";
 import { View , Text, FlatList} from "react-native";
 import {useState, useEffect} from 'react'
 import { OrderProps } from "@/types/order-type";
 import { getPedidos } from "@/services/OrderApi";
+import { Loading } from "@/components/loading";
 
 export default function Orders(){
     const [orders, setOrders] = useState<OrderProps[]>([]);    
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(()=> {
-        async()=>{
-            try
-            {
-                let retornoPedidos = await getPedidos();
+        const fetchOrders = async () => {
+            try {         
+                setLoading(true);
                 
+                let retornoPedidos = await getPedidos();                                
+
                 if(retornoPedidos && retornoPedidos.length > 0){
                     setOrders(retornoPedidos);
                 }
             }
-            catch(error: any)
-            {   
+            catch(error: any) {   
                 console.log(error);
             }
+            finally{
+                setLoading(false);
+            }
         }
-    });
+    
+        fetchOrders(); // Call the async function to fetch orders
+    }, []);
 
     let hasOrders: boolean = orders.length > 0 ? true : false;
 
+    if(loading){
+        return <Loading/>
+    }
+
     return(
-        <View className="flex-1 pt-8 bg-slate-900">
-            
+        <View className="flex-1 pt-8 bg-slate-900">            
+
             <Header title="Seus Pedidos" showDrawerMenu></Header>
             
             {!hasOrders && 
@@ -45,9 +55,7 @@ export default function Orders(){
                 className="mt-10"
                 contentContainerStyle={{gap: 12, paddingHorizontal: 20}}
                 showsHorizontalScrollIndicator={false}
-            />                         
-            
-   
+            />                                     
         </View>
     )
 }

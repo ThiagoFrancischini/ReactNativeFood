@@ -10,12 +10,14 @@ import { Feather } from "@expo/vector-icons";
 import { LinkButton } from "@/components/link-button";
 import { useState } from "react";
 import { useNavigation } from "expo-router";
-import { Linking } from "react-native";
+import { OrderProps, OrderStatus } from "@/types/order-type";
+import { getUserLogado } from "@/stores/helpers/user-in-memory";
+import { insertOrder } from "@/services/OrderApi";
 
 const PHONE_NUMBER = "INFORMAR AQUI"
 
 export default function Cart(){
-    const [adress, setAdress] = useState("");
+    const [observacoes, setObservacoes] = useState("");
     const cartStore = useCartStore();
     const navigation = useNavigation();
 
@@ -33,22 +35,37 @@ export default function Cart(){
         ])
     }
 
-    function handleOrder(){
-        if(adress.trim().length === 0){
-            return Alert.alert("Pedido", "Informe os dados da entrega");
+    async function handleOrder(){
+        try{
+            /*if(adress.trim().length === 0){
+                return Alert.alert("Pedido", "Informe os dados da entrega");
+            }*/
+    
+            const products = cartStore.products.map((product) => '\n ' + product.quantity + " " + product.title).join("") 
+    
+            const order: OrderProps = {
+                id: "",
+                dataInclusao: new Date(),
+                produtos: cartStore.products,
+                PrecoTotal: cartStore.products.reduce((total, product) => total + product.price * product.quantity, 0),
+                statusPedido: OrderStatus.EmAnalise,
+                usuario: await getUserLogado(),
+            }
+                
+            await insertOrder(order);                            
+    
+            Alert.alert("Novo pedido", "Pedido enviado para análise!")
+    
+            cartStore.clear(); 
+            
+            navigation.goBack();
         }
+        catch(error: any)
+        {
+            Alert.alert("Erro", error.message);
 
-        const products = cartStore.products.map((product) => '\n ' + product.quantity + " " + product.title).join("") 
-
-        const message = "NOVO PEDIDO\n Entregar em: " + adress + "\n" + products + "\n\n Valor total: " + total        
-
-        Alert.alert("Novo pedido", message)
-
-        /* Linking.openURL("http://api.whatsapp.com/send?phone= " + PHONE_NUMBER + "&text=" + message) */
-
-        cartStore.clear(); 
-        
-        navigation.goBack();
+            navigation.goBack();
+        }        
     }
 
 
@@ -77,8 +94,8 @@ export default function Cart(){
                             <Text className="text-lime-400 text-2xl font-heading">{total}</Text>
                         </View>
 
-                        <Input placeholder="Informe o endereço de entrega com rua, bairro, CEP, número e complemento..."                               
-                               onChangeText={setAdress}>
+                        <Input placeholder="Informe as observações..."                               
+                               onChangeText={setObservacoes}>
                         </Input>
                     </View>
                 </ScrollView>
