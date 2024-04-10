@@ -46,13 +46,13 @@ export default function Cart(){
             const order: OrderProps = {
                 id: "",
                 dataInclusao: new Date(),
-                produtos: cartStore.products,
-                PrecoTotal: cartStore.products.reduce((total, product) => total + product.price * product.quantity, 0),
+                produtos: [],
+                precoTotal: cartStore.products.reduce((total, product) => total + product.price * product.quantity, 0),
                 statusPedido: OrderStatus.EmAnalise,
                 usuario: await getUserLogado(),
             }
                 
-            await insertOrder(order);                            
+            await insertOrder(order, cartStore.products);                            
     
             Alert.alert("Novo pedido", "Pedido enviado para análise!")
     

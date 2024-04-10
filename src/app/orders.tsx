@@ -7,19 +7,19 @@ import { getPedidos } from "@/services/OrderApi";
 import { Loading } from "@/components/loading";
 
 export default function Orders(){
-    const [orders, setOrders] = useState<OrderProps[]>([]);    
+    const [orders, setOrders] = useState<OrderProps[]>([]);        
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(()=> {
         const fetchOrders = async () => {
             try {         
-                setLoading(true);
-                
-                let retornoPedidos = await getPedidos();                                
+                setLoading(true);            
+
+                let retornoPedidos = await getPedidos();                                     
 
                 if(retornoPedidos && retornoPedidos.length > 0){
                     setOrders(retornoPedidos);
-                }
+                }                
             }
             catch(error: any) {   
                 console.log(error);
@@ -29,7 +29,9 @@ export default function Orders(){
             }
         }
     
-        fetchOrders(); // Call the async function to fetch orders
+        fetchOrders(); // Call the async function to fetch orders      
+        
+        console.log(JSON.stringify(orders));
     }, []);
 
     let hasOrders: boolean = orders.length > 0 ? true : false;
@@ -55,7 +57,7 @@ export default function Orders(){
                 className="mt-10"
                 contentContainerStyle={{gap: 12, paddingHorizontal: 20}}
                 showsHorizontalScrollIndicator={false}
-            />                                     
+            />                                      
         </View>
     )
 }

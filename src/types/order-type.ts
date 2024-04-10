@@ -5,12 +5,12 @@ type OrderProps = {
     id: string,  
     dataInclusao: Date,
     usuario: UserProp | null,
-    PrecoTotal: number,
+    precoTotal: number,
     produtos: ProductProps[],
     statusPedido: OrderStatus,
 }
 
-enum OrderStatus {
+enum OrderStatus {    
     EmAnalise = 0,
     Aprovado = 1,
     Andamento = 2,

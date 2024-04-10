@@ -33,7 +33,7 @@ export default function Home(){
     
     try{                        
         if(!menu || menu.length <1){
-            return (<Loading/>)
+            //return (<Loading/>)
         }
 
         function handleCategorySelect(selectedCategory : string){
