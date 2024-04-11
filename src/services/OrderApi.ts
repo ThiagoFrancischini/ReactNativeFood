@@ -16,6 +16,9 @@ export async function insertOrder(order: OrderProps, products: ProductCartProps[
                     order.produtos.push(produto);
                 }
             }
+            else{
+                order.produtos.push(produto);
+            }
         }
 
         const response = await api.post('/pedido', order);                    

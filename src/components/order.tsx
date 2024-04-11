@@ -6,6 +6,9 @@ import { orderStatusString } from "@/utils/functions/enumDescriptors";
 import { ProductCartProps } from "@/stores/cart-store";
 import { useEffect, useState } from "react";
 import { ProductProps } from "@/types/menu-type";
+import { Button } from "./button";
+import { Feather } from "@expo/vector-icons";
+import colors from "tailwindcss/colors";
 
 export default function Order(item: OrderProps){
     const statusString = orderStatusString(item.statusPedido);
@@ -14,53 +17,32 @@ export default function Order(item: OrderProps){
     const [produtosCart, setProducs] = useState<ProductCartProps[]>([]);  
 
     useEffect(()=> {
-        const produtoMap = new Map<string, number>();
+        const produtosMapeados = item.produtos.map(produto => ({
+            id: produto.id,
+            cover: produto.cover,
+            description: produto.description,
+            ingredients: produto.ingredients,
+            price: produto.price,
+            quantity: item.produtos.filter(p => p.id === produto.id).length,
+            thumbnail: produto.thumbnail,
+            title: produto.title,
+        }));        
 
-        item.produtos.forEach(produto => {
-            if (produtoMap.has(produto.id)) {
+        setProducs(produtosMapeados);
+    }, [item]);    
 
-                const oldValue = produtoMap.get(produto.id);
-
-                produtoMap.set(produto.id, oldValue? oldValue + 1 : 1);
-            }
-            else{
-                produtoMap.set(produto.id, 1);
-            }
-        });
-
-        const keys = produtoMap.keys();
-
-        for(let chave in keys){
-            const quantity = produtoMap.get(chave);
-            const produto = item.produtos.find(x => x.id === chave);
-            
-            if(produto && quantity){
-                const produtoMapeado : ProductCartProps = {
-                    id: produto.id,
-                    cover: produto.cover,
-                    description: produto.description,
-                    ingredients: produto.ingredients,
-                    price: produto.price,
-                    quantity:quantity,
-                    thumbnail: produto.thumbnail,
-                    title: produto.title,
-                } 
-    
-                setProducs([...produtosCart, produtoMapeado])
-            }            
-        }
-    })
-    
+    function confirmacaoPedidoClicked(pedidoId: string){
+        return;
+    }
 
     return(
         <View className="w-full border border-lime-300 rounded-md p-2">
-
             <View className="flex-row justify-between items-center">                
                 <Text className="text-white font-title text-xl my-2">{precoTotal}</Text>  
                 <Text className="text-slate-400  text-sm mr-1">{dataTotal}</Text>  
             </View>            
 
-            {((produtosCart != null || produtosCart != undefined) && produtosCart.length > 0)  &&
+            {produtosCart.length > 0 && (
                 <FlatList 
                     data={produtosCart}
                     keyExtractor={(item) => item.id.toString()}
@@ -74,9 +56,29 @@ export default function Order(item: OrderProps){
                     contentContainerStyle={{gap: 12, paddingHorizontal: 20}}
                     showsHorizontalScrollIndicator={false}
                 />
-            }            
+            )}            
 
-            <Text className="text-white font-title text-sm my-2">Status: {statusString}</Text>
+            
+                <View className="flex-row justify-between items-center">
+                    <Text className="text-white font-title text-sm my-2">Status: {statusString}</Text>
+
+                    {item.statusPedido !== OrderStatus.Finalizado ?
+                        <Button className="pl-2" 
+                                onPress={() => {confirmacaoPedidoClicked(item.id)}}>
+                            <Button.Icon>
+                                <Feather name="camera" size={20}/>
+                            </Button.Icon>
+                            <Button.Text>Confirmar Entrega</Button.Text>
+                        </Button>
+                        :
+
+                        <View className="flex-row justify-between items-center">
+                            <Feather name="check" color={colors.lime[400]} size={20}/>
+                            <Text className="text-lime-400"> Concluído</Text>
+                        </View>
+                    }
+                </View>                        
+                
         </View>
     )    
 }

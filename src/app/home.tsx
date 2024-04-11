@@ -15,9 +15,9 @@ export default function Home(){
     const [menu, setMenu] = useState<MenuProps>();
 
     useEffect(() => {
-        if (!menu || menu.length < 1) {
+        //if (!menu || menu.length < 1) {
             setMenu(getMenu());
-        }
+        //}
     }, [menu]);
     
     
@@ -92,7 +92,7 @@ export default function Home(){
     }
     catch (error : any)
     {        
-        console.log("error.toString()")
+        console.log(error.toString())
         
         return (
             <View className="flex-1 pt-8 justify-center items-center">

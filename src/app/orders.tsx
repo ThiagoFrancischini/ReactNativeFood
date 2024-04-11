@@ -15,7 +15,7 @@ export default function Orders(){
             try {         
                 setLoading(true);            
 
-                let retornoPedidos = await getPedidos();                                     
+                let retornoPedidos = await getPedidos();  
 
                 if(retornoPedidos && retornoPedidos.length > 0){
                     setOrders(retornoPedidos);
@@ -29,9 +29,7 @@ export default function Orders(){
             }
         }
     
-        fetchOrders(); // Call the async function to fetch orders      
-        
-        console.log(JSON.stringify(orders));
+        fetchOrders();
     }, []);
 
     let hasOrders: boolean = orders.length > 0 ? true : false;
