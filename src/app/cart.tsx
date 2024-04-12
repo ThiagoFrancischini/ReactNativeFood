@@ -97,6 +97,8 @@ export default function Cart(){
                         <Input placeholder="Informe as observações..."                               
                                onChangeText={setObservacoes}>
                         </Input>
+
+                        <Text className="text-sm items-center text-white w-100 text-center m-4" >Os dados de entrega serão os vinculados ao usuário</Text>
                     </View>
                 </ScrollView>
             </KeyboardAwareScrollView>

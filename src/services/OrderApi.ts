@@ -46,16 +46,36 @@ export async function getPedidos() : Promise<OrderProps[]>{
             userId = user.id;
         }        
 
-        const response = await api.get('/pedido/' + userId);            
+        const response = await api.get('/pedido/' + userId);                      
         
-        if (response.status !== 200) {
+        if (response.status !== 200) {            
             throw(response.data);
         }
 
         return response.data;
     }
-    catch(error : any){       
-        console.log(error.response.data) 
+    catch(error : any){               
         throw error;
+    }
+}
+
+export async function confirmarEntrega(order: OrderProps){
+    try{
+        order.produtos = [];        
+
+        order.usuario = await getUserLogado();
+
+        console.log(JSON.stringify(order));
+
+        const response = await api.put('/pedido/ConfirmaPedido', order);                        
+
+        if (response.status !== 200) {
+            throw(response.data);
+        }
+    }
+    catch(error : any){               
+        console.log(error)
+
+        throw error.response.data;
     }
 }

@@ -13,13 +13,13 @@ import { Loading } from "@/components/loading"
 export default function Home(){    
 
     const [menu, setMenu] = useState<MenuProps>();
-
-    useEffect(() => {
-        //if (!menu || menu.length < 1) {
-            setMenu(getMenu());
-        //}
-    }, [menu]);
     
+    useEffect(() => {
+        if (!menu || menu.length < 1) {
+            setMenu(getMenu());
+        }
+    }, []);
+            
     
     const categories = menu ? menu.map((item)=> item.title) : [];                
         
@@ -32,9 +32,9 @@ export default function Home(){
     const cartQuantityItems = cartStore.products.reduce((total, product) => total + product.quantity, 0);
     
     try{                        
-        if(!menu || menu.length <1){
-            //return (<Loading/>)
-        }
+        // if(!menu || menu.length <1){
+        //     return (<Loading/>)
+        // }
 
         function handleCategorySelect(selectedCategory : string){
             setCategory(selectedCategory);
@@ -63,7 +63,7 @@ export default function Home(){
                     contentContainerStyle={{gap: 12, paddingHorizontal: 20}}
                     showsHorizontalScrollIndicator={false}/>
     
-                {menu ? (
+                {menu && (
                     <SectionList
                     ref={sectionListRef}
                     sections={menu}
@@ -81,11 +81,7 @@ export default function Home(){
                     showsVerticalScrollIndicator = {false}
                     contentContainerStyle={{paddingBottom: 100}}
                 />
-                ):
-                <View className="flex-1 pt-8 justify-center items-center">
-                    <Text className="text-white font-body text-xl">Erro ao conectar ao servidor!</Text>
-                </View>
-                }                
+                )}              
             </View>
         )
         

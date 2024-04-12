@@ -8,6 +8,7 @@ type OrderProps = {
     precoTotal: number,
     produtos: ProductProps[],
     statusPedido: OrderStatus,
+    fotoEntrega?: string | null,
 }
 
 enum OrderStatus {    

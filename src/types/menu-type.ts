@@ -12,7 +12,7 @@ type ProductProps = {
     description: string;
     cover: any;
     thumbnail: any;
-    ingredients: string[];
+    ingredients: string[]    
 }
 
 export {MenuProps, ProductProps}

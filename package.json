@@ -40,7 +40,8 @@
     "zustand": "^4.5.0",
     "react-native-gesture-handler": "~2.14.0",
     "react-native-reanimated": "~3.6.2",
-    "expo-location": "~16.5.5"
+    "expo-location": "~16.5.5",
+    "expo-image-picker": "~14.7.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
