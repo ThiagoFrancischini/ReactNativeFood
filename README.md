@@ -6,7 +6,7 @@ Aplicativo para pedidos de comida usando como identidade visual o projeto desenv
 
 - O aplicativo contém um fluxo de cadastro e login. No cadastro o app pega sua localização e preenche os campos de endereço ( utilizando as APIs de localização disponibilizadas pelo Expo ), além de usar máscaras para telefone, cpf, e manter o usuario conectado após o primeiro login.
 
-- Após o login o usuario é direcionado a tela de home, onde também irá aparecer um menu lateral ao lado do icone do carrinho ( este que somente aparece caso tenha pelo menos um item) e que pode ser aberto, com as opções de "Meus pedidos", "Home" e "Logout"
+- Após o login o usuario é direcionado a tela de home, onde também irá aparecer um menu lateral ao lado do icone do carrinho ( este que somente aparece caso tenha pelo menos um item), o menu tem as opções de "Meus pedidos", "Home" e "Logout"
 
 - Após será visualizado a tela de Home, onde o app consulta na API o menu com os produtos dísponiveis. Estes produtos tem uma pagina de detalhes no qual o usuario pode adiciona-los ao seu carrinho, sendo que a informação do carrinho é salva no dispositivo.
 
