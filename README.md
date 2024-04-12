@@ -21,6 +21,8 @@ OBS: Eu mantive a identidade visual do curso inicial pois meu foco era aprender 
 Link da API:
 https://github.com/ThiagoFrancischini/AspNetFoodAPI.git
 
+# Para executar
+Configure o ambiente de instalação do Expo Go, e configure a API para ser executada também. Após a configuração da API, pegue a url que ela estará rodando, e altere a url do arquivo Api.ts em src/services para a sua.
 
 # ROADMAP
 
