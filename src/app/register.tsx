@@ -5,14 +5,17 @@ import { ErrorProps } from "@/types/error-type";
 import { FormatCpf } from "@/utils/functions/format-cpf";
 import { UserProp } from "@/types/user-type";
 import { useEffect, useState } from "react";
-import { View,Text, ScrollView, Image, Platform } from "react-native";
+import { View,Text, ScrollView, Image, Platform, Alert } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { FormatPhone } from "@/utils/functions/format-phone";
 import * as Location from 'expo-location';
 import { LinkButton } from "@/components/link-button";
+import { router } from "expo-router";
+import { Loading } from "@/components/loading";
 
 export default function Registro(){               
     const [location, setLocation] = useState<Location.LocationObject | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         (async () => {
@@ -78,7 +81,9 @@ export default function Registro(){
     }    
 
     async function submit(user: UserProp, confirmedPassword: string){
-        try{            
+        try{          
+            setLoading(true);      
+
             if(!user){
                 return;
             }        
@@ -88,13 +93,24 @@ export default function Registro(){
             }                         
 
             await insert(user);
+
+            Alert.alert("Usuario cadastrado");
+
+            router.back();
         }
         catch(error: any){         
             console.log(error.message)   
             setError({exists: true, message: error.message})
         }        
+        finally{
+            setLoading(false);      
+        }
     }
 
+
+    if(loading){
+        return <Loading/>
+    }
 
     return(
         <View className="flex-1 pt-8">            
@@ -121,10 +137,10 @@ export default function Registro(){
                         <Text className=" ml-4 text-white font-body text-lg font-bold">Telefone</Text>
                         <Entry onChangeText={(text) => handleUser('telefone', text)} value={user.telefone} maxLength={15} keyboardType="numeric"></Entry>
 
-                        <Text className=" ml-4 text-white font-body text-lg font-bold">Cidade</Text>
+                        <Text className=" ml-4 text-white font-body text-lg font-bold">Bairro</Text>
                         <Entry onChangeText={(text) => handleUser('cidade', text)} value={user.cidade}></Entry>
 
-                        <Text className=" ml-4 text-white font-body text-lg font-bold">Bairro</Text>
+                        <Text className=" ml-4 text-white font-body text-lg font-bold">Cidade</Text>
                         <Entry onChangeText={(text) => handleUser('bairro', text)} value={user.bairro}></Entry>
 
                         <Text className=" ml-4 text-white font-body text-lg font-bold">Rua</Text>

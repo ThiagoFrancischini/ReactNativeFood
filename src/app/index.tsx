@@ -1,13 +1,14 @@
 import { Entry } from "@/components/entry";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, Image, ScrollView } from "react-native";
 import { FormatCpf } from "@/utils/functions/format-cpf";
 import { Button } from "@/components/button";
 import { LinkButton } from "@/components/link-button";
-import { authenticate } from "@/services/UserApi";
+import { authenticate, sendNotificationToken } from "@/services/UserApi";
 import { router } from "expo-router";
 import 'react-native-gesture-handler'
 import { getUserLogado, setUser } from "@/stores/helpers/user-in-memory";
+import { usePushNotifications } from "../../usePushNotifications";
 function goToHome(){
     router.replace("/drawer.routes");        
 }
@@ -18,7 +19,7 @@ async function getCurrentUser() : Promise<boolean>{
         const jsonObj = await getUserLogado();
     
         if(jsonObj){
-            if(jsonObj.autenticado){
+            if(jsonObj.autenticado){                
                 return true;
             }
         }                
@@ -30,14 +31,16 @@ async function getCurrentUser() : Promise<boolean>{
     }    
 }
 
-export default function Login(){
+export default function Login(){          
+    const {expoPushToken, notification} = usePushNotifications();     
 
-
-    getCurrentUser().then((result) => {
-        if(result){
-            goToHome();            
-        }
-    })    
+    useEffect(()=> {        
+        getCurrentUser().then((result) => {            
+            if(result){
+                goToHome();            
+            }
+        });    
+    });    
 
     const [cpf, setCpf] = useState("");
     const [password, setPassword] = useState("");
@@ -53,15 +56,17 @@ export default function Login(){
 
     async function onAuthenticate(cpf : string, password : string){
         try{            
-            let user = await authenticate(cpf, password);
-    
+            let user = await authenticate(cpf, password);                
+
             if(user == undefined || user == null){
                 throw("Cpf ou senha inválidos");
             }                             
 
             setSucessLogin(true);            
 
-            setUser(user);                                          
+            setUser(user);    
+
+            sendNotificationToken(user.id, expoPushToken?.data!);
 
             goToHome();
 

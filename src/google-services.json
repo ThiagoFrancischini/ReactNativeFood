@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1068575424717",
+    "project_id": "netrestaurant-26779",
+    "storage_bucket": "netrestaurant-26779.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1068575424717:android:b1d7cdf6e03da5fc6a2984",
+        "android_client_info": {
+          "package_name": "com.anonymous.CursoReact"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC5LbU_kkh7uZCJQAYjkl1KJ4xlyzKaE4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,7 @@
+import { sendNotificationToken } from "@/services/UserApi";
 import { UserProp } from "@/types/user-type";
 import * as SecureStore from 'expo-secure-store';
+import { usePushNotifications } from "../../../usePushNotifications";
 
 var user: UserProp | null;
 
@@ -25,7 +27,7 @@ async function getUserLogado() : Promise<UserProp | null>{
 
 async function setUser(newUser: UserProp){
     if(newUser){
-        user = newUser;
+        user = newUser;        
         await SecureStore.setItemAsync("userSecureStore", JSON.stringify(user));
     }    
 }

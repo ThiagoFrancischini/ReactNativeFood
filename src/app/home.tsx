@@ -12,13 +12,14 @@ import { Loading } from "@/components/loading"
 
 export default function Home(){    
 
+    //Afim de não apagar completamente o fluxo de menu original do curso, acabei tentando adapta-lo, mas será refatorado depois.
     const [menu, setMenu] = useState<MenuProps>();
-    
+        
     useEffect(() => {
         if (!menu || menu.length < 1) {
             setMenu(getMenu());
         }
-    }, []);
+    }, [menu]);
             
     
     const categories = menu ? menu.map((item)=> item.title) : [];                
