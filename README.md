@@ -14,6 +14,8 @@ Aplicativo para pedidos de comida usando como identidade visual o projeto desenv
 
 - Na conclusão de pedido, todos os devidos processamentos e validações são realizados, e o pedido é enviado para uma API com as informações do usuário, produtos, preço, data, e um status de pendente.
 
+- Quando o status de um pedido é trocado pela API, é enviada um notificação Push para o App, com as novas informações de status do Pedido ( utilizando os serviços do Expo ); 
+
 - Os pedidos podem ser visualizados na aba " Meus pedidos ", onde aparecerão uma lista de pedidos com o status diferente de finalizados, e estes pedidos pendentes, tem uma opção de " Confirmar entrega ", onde uma tela modal aparece, dando a opção do usuario tirar uma foto ou selecionar um anexo do pedido, comprovando sua entrega.
 
 OBS: Eu mantive a identidade visual do curso inicial pois meu foco era aprender a tecnologia e não desenvolver um produto próprio.
@@ -26,9 +28,6 @@ Configure o ambiente de instalação do Expo Go, e configure a API para ser exec
 
 # Video do app funcionando
 https://drive.google.com/file/d/1yYoZchshCnxwueG99QiN-QlmgTJgOsmc/view?usp=sharing
-
-# ROADMAP
-Desenvolver fluxo de notificações push, que serão recebidas nas trocas de status dos pedidos.
 
 # Para não esquecer:
 Bibliotecas Utilizadas:
